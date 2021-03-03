@@ -2,10 +2,11 @@
 
 'use strict'
 
-import { Command } from 'commander'
-import createWorker, { InitConfiguration } from './createWorker'
+import { Command, option } from 'commander'
 
-const { version } = require('./package')
+import serve from './commands/serve'
+
+const { version } = require('../package')
 const program = new Command()
 
 program
@@ -13,30 +14,10 @@ program
   .name('signal-fire')
   .command('serve')
   .description('serve a server')
-  .option('-p, --port <port>', 'server port', '3003')
-  .option('--path <path>', 'path to accept upgrades on')
-  .action(async options => {
-    const worker = await createWorker()
-
-    console.log('- Worker created')
-
-    const config: InitConfiguration = {
-      registry: 'local'
-    }
-
-    if (options.path) {
-      config.server = {
-        path: options.path
-      }
-    }
-
-    await worker.command('init', config)
-
-    console.log('- Worker initialized')
-
-    await worker.command('start', parseInt(options.port))
-
-    console.log(`- Server running on port ${options.port}`)
-  })
+  .option('-c, --config <path>', 'use a configuration file')
+  .option('-p, --port <port>', 'server port (default 3003)')
+  .option('-P, --path <path>', 'path to accept upgrades on')
+  .option('-d, --detach', 'run server in detached mode', false)
+  .action(serve)
 
 program.parse(process.argv)

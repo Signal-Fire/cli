@@ -7,6 +7,10 @@ export default function handleRequest (path?: string): (req: IncomingMessage, re
   return function handleRequest (req: IncomingMessage, res: ServerResponse) {
     let status = path ? 404 : 426
 
+    if (path && parse(req.url).pathname === path) {
+      status = 426
+    }
+
     const message = STATUS_CODES[status]
     res.writeHead(status, message, {
       'Content-Type': 'text/plain',
