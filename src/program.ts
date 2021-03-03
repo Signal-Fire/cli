@@ -5,10 +5,11 @@
 import { Command } from 'commander'
 import createWorker, { InitConfiguration } from './createWorker'
 
+const { version } = require('./package')
 const program = new Command()
 
 program
-  .version('0.0.1')
+  .version(version)
   .name('signal-fire')
   .command('serve')
   .description('serve a server')
