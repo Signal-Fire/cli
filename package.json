@@ -1,0 +1,38 @@
+{
+  "name": "@signal-fire/cli",
+  "version": "0.0.1",
+  "description": "CLI for Signal-Fire Server",
+  "main": "./dist/index.js",
+  "bin": {
+    "signal-fire": "./dist/program.js"
+  },
+  "author": "Michiel van der Velde <michiel@michielvdvelde.nl>",
+  "homepage": "http://github.com/Signal-Fire/cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Signal-Fire/cli.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "keywords": [
+    "webrtc",
+    "data",
+    "rtc",
+    "websocket",
+    "json"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/ws": "^7.4.0"
+  },
+  "dependencies": {
+    "@art-of-coding/wormhole": "^2.0.1",
+    "@lucets/registry": "^0.2.0",
+    "@signal-fire/server": "^0.1.0",
+    "commander": "^7.1.0"
+  }
+}
