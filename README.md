@@ -2,6 +2,14 @@
 
 CLI for [Signal-Fire Server](https://github.com/Signal-Fire/server).
 
+Signal-Fire Server is a __WebRTC__ signaling server built for node.js.
+
+## Features
+
+* Run multiple instances of [Signal-Fire Server](https://github.com/Signal-Fire/server)
+* Start background workers
+* Easy configuration and set-up
+
 ## Install
 
 > This project is currently a __work in progress__!
@@ -15,27 +23,68 @@ npm i -g @signal-fire/cli
 ## Usage
 
 ```
-Usage: signal-fire [options] [command]
+Usage: program [options] [command]
 
 Options:
-  -V, --version    output the version number
-  -h, --help       display help for command
+  -V, --version         output the version number
+  -h, --help            display help for command
 
 Commands:
-  serve [options]  serve a server
-  help [command]   display help for command
+  start [options]       start a new worker
+  stop <pid>            stop worker with the given pid
+  info [options] <pid>  list info for worker
+  list [options]        list all active workers
+  help [command]        display help for command
 ```
 
-### Serve
+### Start
 
 ```
-Usage: signal-fire serve [options]
+Usage: program start [options]
 
-serve a server
+start a new worker
 
 Options:
-  -p, --port <port>  server port (default: "3003")
-  -h, --help         display help for command
+  -p, --port <port>    port to listen on
+  -c, --config <file>  path to configuration file
+  -h, --host <host>    host to listen on
+  -P, --path <path>    path to listen on
+  --help               display help for command
+```
+
+## Stop
+
+```
+Usage: program stop [options] <pid>
+
+stop worker with the given pid
+
+Options:
+  -h, --help  display help for command
+```
+
+## List
+
+```
+Usage: program list [options]
+
+list all active workers
+
+Options:
+  -t, --token  include api token in output (default: false)
+  -h, --help   display help for command
+```
+
+### Info
+
+```
+Usage: program info [options] <pid>
+
+list info for worker
+
+Options:
+  -t, --token  include api token in output (default: false)
+  -h, --help   display help for command
 ```
 
 ## License

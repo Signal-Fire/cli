@@ -2,22 +2,41 @@
 
 'use strict'
 
-import { Command, option } from 'commander'
+import { Command } from 'commander'
 
-import serve from './commands/serve'
+import start from './commands/start'
+import stop from './commands/stop'
+import info from './commands/info'
+import list from './commands/list'
 
 const { version } = require('../package')
 const program = new Command()
 
 program
   .version(version)
-  .name('signal-fire')
-  .command('serve')
-  .description('serve a server')
-  .option('-c, --config <path>', 'use a configuration file')
-  .option('-p, --port <port>', 'server port (default 3003)')
-  .option('-P, --path <path>', 'path to accept upgrades on')
-  .option('-d, --detach', 'run server in detached mode', false)
-  .action(serve)
+  .command('start')
+  .description('start a new worker')
+  .option('-p, --port <port>', 'port to listen on')
+  .option('-c, --config <file>', 'path to configuration file')
+  .option('-h, --host <host>', 'host to listen on')
+  .option('-P, --path <path>', 'path to listen on')
+  .action(start)
+
+program
+  .command('stop <pid>')
+  .description('stop worker with the given pid')
+  .action(stop)
+
+program
+  .command('info <pid>')
+  .description('list info for worker')
+  .option('-t, --token', 'include api token in output', false)
+  .action(info)
+
+program
+  .command('list')
+  .description('list all active workers')
+  .option('-t, --token', 'include api token in output', false)
+  .action(list)
 
 program.parse(process.argv)
