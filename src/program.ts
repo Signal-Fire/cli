@@ -13,6 +13,7 @@ const { version } = require('../package')
 const program = new Command()
 
 program
+  .name('signal-fire')
   .version(version)
   .command('start')
   .description('start a new worker')

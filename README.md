@@ -23,7 +23,7 @@ npm i -g @signal-fire/cli
 ## Usage
 
 ```
-Usage: program [options] [command]
+Usage: signal-fire [options] [command]
 
 Options:
   -V, --version         output the version number
@@ -40,7 +40,7 @@ Commands:
 ### Start
 
 ```
-Usage: program start [options]
+Usage: signal-fire start [options]
 
 start a new worker
 
@@ -55,7 +55,7 @@ Options:
 ## Stop
 
 ```
-Usage: program stop [options] <pid>
+Usage: signal-fire stop [options] <pid>
 
 stop worker with the given pid
 
@@ -66,7 +66,7 @@ Options:
 ## List
 
 ```
-Usage: program list [options]
+Usage: signal-fire list [options]
 
 list all active workers
 
@@ -78,7 +78,7 @@ Options:
 ### Info
 
 ```
-Usage: program info [options] <pid>
+Usage: signal-fire info [options] <pid>
 
 list info for worker
 
