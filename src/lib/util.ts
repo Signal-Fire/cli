@@ -13,9 +13,7 @@ export interface WorkerConfiguration {
     name: string,
     args?: any[]
   },
-  server?: ListenOptions & {
-    path?: string
-  }
+  server?: ListenOptions
 }
 
 /** Read JSON from a file. */
