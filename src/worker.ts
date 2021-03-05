@@ -111,12 +111,12 @@ async function dispose (): Promise<void> {
     await closeServer(appServer)
   }
 
-  await deleteProcess(process.pid)
-
   if (wormhole.connected) {
     await wormhole.event('disposed')
     wormhole.disconnect()
   }
+
+  await deleteProcess(process.pid)
 
   process.exit(0)
 }
