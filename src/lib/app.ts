@@ -1,6 +1,8 @@
 'use strict'
 
-import { Server } from 'http'
+import { Server, IncomingMessage, ServerResponse, STATUS_CODES } from 'http'
+import { parse } from 'url'
+
 import createApp from '@signal-fire/server'
 import { LocalRegistry, Registry } from '@lucets/registry'
 
@@ -31,10 +33,29 @@ export function loadRegistry (config: WorkerConfiguration['registry']): Registry
   }
 }
 
+function handleRequest (path?: string): (req: IncomingMessage, res: ServerResponse) => void {
+  return function requestHandler (req, res) {
+    let statusCode = path ? 404 : 426
+
+    if (path && parse(req.url).pathname === path) {
+      statusCode = 426
+    }
+
+    const message = STATUS_CODES[statusCode]
+    res.writeHead(statusCode, message, {
+      'Content-Type': 'text/plain',
+      'Content-Length': Buffer.byteLength(message),
+      'Connection': 'close'
+    })
+
+    res.end(message)
+  }
+}
+
 export default function createServer (config: WorkerConfiguration): Server {
   const registry = loadRegistry(config.registry)
   const app = createApp(registry)
-  const server = new Server(/* TODO: Add request listener */)
+  const server = new Server(handleRequest(config.server?.path))
 
   server.on('upgrade', app.onUpgrade())
   return server
