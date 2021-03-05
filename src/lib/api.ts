@@ -12,6 +12,8 @@ export function checkToken (token: string): Middleware {
     if (!tokenStr || tokenStr !== token) {
       throw createHttpError(401, 'Missing or invalid token')
     }
+
+    return next()
   }
 }
 
@@ -23,6 +25,7 @@ export default function createApi ({ token }: { token: string }): Server {
     checkToken(token),
     async function resourceUsage (ctx, next) {
       ctx.status = 200
+      ctx.response.type = 'json'
       ctx.body = process.resourceUsage()
       return next()
     }
