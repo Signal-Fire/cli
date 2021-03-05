@@ -48,7 +48,7 @@ export default async function start (opts: StartOptions): Promise<void> {
   let wormhole: Wormhole
 
   try {
-    [ worker, wormhole ] = await spawnWorker({ detached: true })
+    [ worker, wormhole ] = await spawnWorker()
   } catch (e) {
     console.log('Unable to spawn worker')
     console.error(e)

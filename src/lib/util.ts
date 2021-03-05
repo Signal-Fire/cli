@@ -47,11 +47,11 @@ export async function closeServer (server: Server): Promise<void> {
 }
 
 /** Spawn a new worker */
-export async function spawnWorker ({ detached }: { detached: boolean }): Promise<[ ChildProcess, Wormhole ]> {
+export async function spawnWorker (): Promise<[ ChildProcess, Wormhole ]> {
   const workerPath = resolve(__dirname, '../worker.js')
   const worker = spawn('node', [ workerPath ], {
     stdio: [ 'ignore', 'ignore', 'ignore', 'ipc' ],
-    detached
+    detached: true
   })
   const wormhole = new Wormhole(worker)
 
