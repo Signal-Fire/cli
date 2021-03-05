@@ -52,6 +52,52 @@ Options:
   --help               display help for command
 ```
 
+### Configuration file
+
+```ts
+interface Configuration {
+  registry: 'local' | {
+    name: string,
+    args?: any[]
+  },
+  server: {
+    port?: number
+    host?: string
+    backlog?: number
+    path?: string
+    exclusive?: boolean
+    readableAll?: boolean
+    writableAll?: boolean
+    ipv6Only?: boolean
+  },
+  rtcConfig?: {
+    bundlePolicy?: RTCBundlePolicy
+    certificates?: RTCCertificate[]
+    iceCandidatePoolSize?: number
+    iceServers?: RTCIceServer[]
+    iceTransportPolicy?: RTCIceTransportPolicy
+    rtcpMuxPolicy?: RTCRtcpMuxPolicy
+  }
+}
+```
+
+Example configuration file:
+
+```json
+{
+  "registry": "local",
+  "server": {
+    "port": 3303,
+    "path": "/socket"
+  },
+  "rtcConfig": {
+    "iceServers": {
+      "urls": "ice.example.com"
+    }
+  }
+}
+```
+
 ## Stop
 
 ```
