@@ -13,7 +13,8 @@ export interface WorkerConfiguration {
     name: string,
     args?: any[]
   },
-  server?: ListenOptions
+  server?: ListenOptions,
+  rtcConfig?: RTCConfiguration
 }
 
 /** Read JSON from a file. */
