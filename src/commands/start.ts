@@ -23,7 +23,10 @@ export default async function start (opts: StartOptions): Promise<void> {
   if (opts.config) {
     // Load from configuration
     try {
-      config = await readJSON(resolve(process.cwd(), opts.config))
+      config = {
+        ...config,
+        ...(await readJSON(resolve(process.cwd(), opts.config)))
+      }
     } catch (e) {
       console.log('Error: unable to load configuration file')
       console.error(e)
@@ -35,15 +38,7 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
 
     if (opts.port) {
-      const port = parseInt(opts.port)
-      const available = await portAvailable(port)
-
-      if (!available) {
-        console.log(`Port ${port} is not available`)
-        return
-      }
-
-      config.server.port = port
+      config.server.port = parseInt(opts.port)
     }
 
     if (opts.path) {
@@ -51,7 +46,17 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
   }
 
-  //
+  // Check port availability
+  if (config.server.port) {
+    const { port } = config.server
+    const available = await portAvailable(port)
+
+    if (!available) {
+      console.log(`Port ${port} is not available`)
+      return
+    }
+  }
+
   let worker: ChildProcess
   let wormhole: Wormhole
 

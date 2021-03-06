@@ -1,7 +1,7 @@
 'use strict'
 
 import { Server } from 'http'
-import { ListenOptions } from 'net'
+import { Server as NetServer } from 'net'
 import { resolve } from 'path'
 import { readFile, writeFile } from 'fs/promises'
 import { ChildProcess, spawn } from 'child_process'
@@ -110,7 +110,7 @@ export async function portAvailable (port: number): Promise<boolean> {
       resolve(true)
     }
 
-    const server = new Server()
+    const server = new NetServer()
     server.on('error', onError)
     server.on('listening', onListening)
     server.listen(port)
