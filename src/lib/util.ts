@@ -13,10 +13,17 @@ export interface WorkerConfiguration {
     name: string,
     args?: any[]
   },
-  server?: ListenOptions & {
+  server?: {
+    host?: string,
+    port?: string,
+    ipv6Only?: boolean,
     pathname?: string
   },
-  rtcConfig?: RTCConfiguration
+  rtcConfig?: {
+    iceCandidatePoolSize?: number,
+    iceServers: RTCIceServer[],
+    iceTransportPolicy: RTCIceTransportPolicy
+  }
 }
 
 /** Read JSON from a file. */
