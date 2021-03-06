@@ -1,6 +1,7 @@
 'use strict'
 
 import { resolve } from 'path'
+import { unlink } from 'fs/promises'
 import { readJSON, writeJSON } from './util'
 
 export interface ProcessInfo {
@@ -36,7 +37,11 @@ export async function readProcessFile (): Promise<ProcessInfoList> {
 
 /** Write the process file. */
 export async function writeProcessFile (list: ProcessInfoList): Promise<void> {
-  return writeJSON(PROCESS_FILE, list)
+  if (!list || !Object.keys(list).length) {
+    await unlink(PROCESS_FILE)
+  } else {
+    await writeJSON(PROCESS_FILE, list)
+  }
 }
 
 /** Set process info. */
