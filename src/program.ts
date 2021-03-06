@@ -17,10 +17,10 @@ program
   .version(version)
   .command('start')
   .description('start a new worker')
-  .option('-p, --port <port>', 'port to listen on')
   .option('-c, --config <file>', 'path to configuration file')
+  .option('-p, --port <port>', 'port to listen on')
   .option('-h, --host <host>', 'host to listen on')
-  .option('-P, --path <path>', 'path to listen on')
+  .option('-P, --path <path>', 'path to listen for upgrades on')
   .action(start)
 
 program
