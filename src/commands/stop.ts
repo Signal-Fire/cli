@@ -1,42 +1,32 @@
 'use strict'
 
-import { readProcessFile, processExists, writeProcessFile, ProcessInfoList } from '../lib/process'
+import { readProcessFile, writeProcessFile, ProcessInfoList } from '../lib/process'
+import { isNumber } from '../lib/util'
 
-function deletePid (pid: number, list: ProcessInfoList): void {
+function kill (pid: number, list: ProcessInfoList): void {
   if (!list[pid]) {
     throw new Error(`Worker with PID ${pid} not found`)
   }
 
   delete list[pid]
 
-  if (!processExists(pid)) {
-    throw new Error(`Worker with PID ${pid} not found`)
-  }
-
   try {
     process.kill(pid, 'SIGTERM')
   } catch (e) {
-    throw new Error('Unable to stop worker')
-  }
-}
-
-function isInteger (str: string) {
-  try {
-    parseInt(str)
-    return true
-  } catch(e) {
-    return false
+    throw new Error(`Worker with PID ${pid} not found`)
   }
 }
 
 export default async function stop (pid: string): Promise<void> {
-  if (pid !== 'all' && !isInteger(pid)) {
-    console.log('Expected PID to be \'all\' or an integer')
+  if (pid !== 'all' && !isNumber(pid)) {
+    console.log('Expected PID to be \'all\' or a number')
     return
   }
 
   const list = await readProcessFile()
   const pids = Object.keys(list)
+
+  console.log('Stopping all active workers\n')
 
   if (!pids.length) {
     console.log('There are no active workers')
@@ -44,13 +34,15 @@ export default async function stop (pid: string): Promise<void> {
   }
 
   if (pid === 'all') {
-    console.log(`Stopping all ${pids.length} workers...\n`)
-
     let i = 0
     for (const wid of pids) {
       i++
-      deletePid(parseInt(wid), list)
-      console.log(`${i}. Worker with PID ${wid} stopped`)
+      try {
+        kill(parseInt(wid), list)
+        console.log(`${i}. Worker with PID ${wid} stopped`)
+      } catch (e) {
+        console.log(`${i}. Worker with PID ${wid} not found`)
+      }
     }
 
     await writeProcessFile(list)
@@ -60,7 +52,7 @@ export default async function stop (pid: string): Promise<void> {
   }
 
   try {
-    deletePid(parseInt(pid), list)
+    kill(parseInt(pid), list)
     await writeProcessFile(list)
 
     console.log(`Worker with PID ${pid} stopped`)

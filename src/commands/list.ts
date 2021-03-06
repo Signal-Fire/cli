@@ -2,42 +2,37 @@
 
 import Table from 'cli-table3'
 
-import { readProcessFile, processExists, writeProcessFile } from '../lib/process'
+import { readProcessFile } from '../lib/process'
 
 export default async function list ({ token }: { token: boolean }): Promise<void> {
-  console.log('\nLisiting active workers:\n')
+  console.log('Listing all active workers\n')
 
-  const processes = await readProcessFile()
-  let updated = false
+  const list = await readProcessFile()
+  const pids = Object.keys(list)
 
-  if (!Object.keys(processes).length) {
-    const table = new Table()
-    table.push([ 'No active workers' ])
-    console.log(table.toString())
+  if (!pids.length) {
+    console.log('There are no active workers')
     return
   }
 
-  const head = [ '#', 'PID', 'Created', 'API Port', 'App Port' ]
+  const head = [
+    '#',
+    'PID',
+    'Created',
+    'API Port',
+    'App Port'
+  ]
 
   if (token) {
     head.splice(3, 0, 'API Token')
   }
 
-  const table = new Table({
-    head
-  })
+  const table = new Table({ head })
 
   let i = 0
-  for (const pid of Object.keys(processes)) {
-    if (!processExists(parseInt(pid))) {
-      // Delete process from file
-      delete processes[pid]
-      updated = true
-      continue
-    }
-
+  for (const pid of pids) {
     i++
-    const info = processes[pid]
+    const info = list[pid]
     const arr = [
       i,
       info.pid,
@@ -54,8 +49,4 @@ export default async function list ({ token }: { token: boolean }): Promise<void
   }
 
   console.log(table.toString())
-
-  if (updated) {
-    await writeProcessFile(processes)
-  }
 }

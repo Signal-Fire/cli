@@ -88,6 +88,7 @@ export async function spawnWorker (): Promise<[ ChildProcess, Wormhole ]> {
   })
 }
 
+/** Check if the specified port is available */
 export async function portAvailable (port: number): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     function removeListeners () {
@@ -115,4 +116,9 @@ export async function portAvailable (port: number): Promise<boolean> {
     server.on('listening', onListening)
     server.listen(port)
   })
+}
+
+/** Check if a string is a number */
+export function isNumber (str: string) {
+  return !isNaN(Number(str))
 }

@@ -16,7 +16,7 @@ export interface ProcessInfoList {
 }
 
 /** Path to the process file. */
-export const PROCESS_FILE = resolve(__dirname, '../../.processes')
+const PROCESS_FILE = resolve(__dirname, '../../.processes')
 
 /** Read the process file. */
 export async function readProcessFile (): Promise<ProcessInfoList> {
@@ -56,15 +56,5 @@ export async function deleteProcess (pid: number, list?: ProcessInfoList): Promi
   if (list[pid]) {
     delete list[pid]
     await writeProcessFile(list)
-  }
-}
-
-/** Check if a process exists */
-export function processExists (pid: number): boolean {
-  try {
-    process.kill(pid, 0)
-    return true
-  } catch (e) {
-    return false
   }
 }

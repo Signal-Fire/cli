@@ -5,7 +5,7 @@ import { ChildProcess } from 'child_process'
 
 import Wormhole from '@art-of-coding/wormhole'
 
-import { WorkerConfiguration, readJSON, spawnWorker, portAvailable } from '../lib/util'
+import { WorkerConfiguration, readJSON, spawnWorker, portAvailable, isNumber } from '../lib/util'
 
 export interface StartOptions {
   config?: string,
@@ -15,6 +15,8 @@ export interface StartOptions {
 }
 
 export default async function start (opts: StartOptions): Promise<void> {
+  console.log('Starting a new worker\n')
+
   let config: WorkerConfiguration = {
     registry: 'local',
     server: {}
@@ -38,10 +40,20 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
 
     if (opts.port) {
+      if (!isNumber(opts.port)) {
+        console.log('Expected \'port\' to be a number')
+        return
+      }
+
       config.server.port = parseInt(opts.port)
     }
 
     if (opts.path) {
+      if (!opts.path.startsWith('/')) {
+        console.log('Expected \'path\' to start with a forward slash (/)')
+        return
+      }
+
       config.server.pathname = opts.path
     }
   }
@@ -64,7 +76,6 @@ export default async function start (opts: StartOptions): Promise<void> {
     [ worker, wormhole ] = await spawnWorker()
   } catch (e) {
     console.log('\nUnable to spawn worker')
-    console.error(e)
     return
   }
 
@@ -72,7 +83,6 @@ export default async function start (opts: StartOptions): Promise<void> {
     await wormhole.command<void>('configure', config)
   } catch (e) {
     console.log('\nUnable to configure worker')
-    console.error(e)
     return
   }
 
@@ -82,11 +92,10 @@ export default async function start (opts: StartOptions): Promise<void> {
     appPort = await wormhole.command<number>('start')
   } catch (e) {
     console.log('\nUnable to start worker')
-    console.error(e)
     return
   }
 
-  console.log(`\nWorker has been started on port ${appPort}`)
+  console.log(`Worker has been started on port ${appPort}`)
 
   wormhole.disconnect()
   worker.unref()
