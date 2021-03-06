@@ -5,7 +5,7 @@ import { ChildProcess } from 'child_process'
 
 import Wormhole from '@art-of-coding/wormhole'
 
-import { WorkerConfiguration, readJSON, spawnWorker } from '../lib/util'
+import { WorkerConfiguration, readJSON, spawnWorker, portAvailable } from '../lib/util'
 
 export interface StartOptions {
   config?: string,
@@ -35,7 +35,15 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
 
     if (opts.port) {
-      config.server.port = parseInt(opts.port)
+      const port = parseInt(opts.port)
+      const available = await portAvailable(port)
+
+      if (!available) {
+        console.log(`Port ${port} is not available`)
+        return
+      }
+
+      config.server.port = port
     }
 
     if (opts.path) {
@@ -50,7 +58,7 @@ export default async function start (opts: StartOptions): Promise<void> {
   try {
     [ worker, wormhole ] = await spawnWorker()
   } catch (e) {
-    console.log('Unable to spawn worker')
+    console.log('\nUnable to spawn worker')
     console.error(e)
     return
   }
@@ -58,23 +66,23 @@ export default async function start (opts: StartOptions): Promise<void> {
   try {
     await wormhole.command<void>('configure', config)
   } catch (e) {
-    console.log('Unable to configure worker')
+    console.log('\nUnable to configure worker')
     console.error(e)
     return
   }
+
+  let appPort: number
 
   try {
-    await wormhole.command<void>('start')
+    appPort = await wormhole.command<number>('start')
   } catch (e) {
-    console.log('Unable to start worker')
+    console.log('\nUnable to start worker')
     console.error(e)
     return
   }
 
-  console.log(`Worker has been started with PID ${worker.pid}`)
+  console.log(`\nWorker has been started on port ${appPort}`)
 
   wormhole.disconnect()
   worker.unref()
-
-  console.log('Worker detached')
 }
