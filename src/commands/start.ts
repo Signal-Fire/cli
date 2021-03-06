@@ -47,7 +47,7 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
 
     if (opts.path) {
-      config.server.path = opts.path
+      config.server.pathname = opts.path
     }
   }
 
