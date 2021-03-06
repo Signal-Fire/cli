@@ -15,7 +15,7 @@ export interface WorkerConfiguration {
   },
   server?: {
     host?: string,
-    port?: string,
+    port?: number,
     ipv6Only?: boolean,
     pathname?: string
   },
