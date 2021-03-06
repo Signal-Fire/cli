@@ -63,20 +63,14 @@ interface Configuration {
   server: {
     port?: number
     host?: string
-    backlog?: number
     path?: string
-    exclusive?: boolean
-    readableAll?: boolean
-    writableAll?: boolean
+    patname: string
     ipv6Only?: boolean
   },
   rtcConfig?: {
-    bundlePolicy?: RTCBundlePolicy
-    certificates?: RTCCertificate[]
     iceCandidatePoolSize?: number
     iceServers?: RTCIceServer[]
     iceTransportPolicy?: RTCIceTransportPolicy
-    rtcpMuxPolicy?: RTCRtcpMuxPolicy
   }
 }
 ```
@@ -88,12 +82,12 @@ Example configuration file:
   "registry": "local",
   "server": {
     "port": 3303,
-    "path": "/socket"
+    "pathname": "/socket"
   },
   "rtcConfig": {
-    "iceServers": {
+    "iceServers": [{
       "urls": "ice.example.com"
-    }
+    }]
   }
 }
 ```
