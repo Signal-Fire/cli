@@ -13,7 +13,9 @@ export interface WorkerConfiguration {
     name: string,
     args?: any[]
   },
-  server?: ListenOptions,
+  server?: ListenOptions & {
+    pathname?: string
+  },
   rtcConfig?: RTCConfiguration
 }
 
