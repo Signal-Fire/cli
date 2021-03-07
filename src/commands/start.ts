@@ -47,6 +47,7 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
   } else {
     if (opts.host) {
+      // @ts-ignore
       config.app.host = opts.host
     }
 
@@ -56,6 +57,7 @@ export default async function start (opts: StartOptions): Promise<void> {
         return
       }
 
+      // @ts-ignore
       config.app.port = parseInt(opts.port)
     }
 
@@ -65,12 +67,15 @@ export default async function start (opts: StartOptions): Promise<void> {
         return
       }
 
+      // @ts-ignore
       config.app.pathname = opts.path
     }
   }
 
   // Check port availability
+      // @ts-ignore
   if (config.app.port) {
+    // @ts-ignore
     const { port } = config.app
     const available = await portAvailable(port)
 
