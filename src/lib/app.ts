@@ -57,6 +57,7 @@ function handleRequest (path?: string): (req: IncomingMessage, res: ServerRespon
 export default function createServer (config: WorkerConfiguration): Server {
   const registry = loadRegistry(config.registry)
   const app = createApp(registry, config.rtcConfig)
+  // @ts-ignore
   const server = new Server(handleRequest(config.app?.pathname))
 
   server.on('upgrade', app.onUpgrade())
