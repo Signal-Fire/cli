@@ -74,7 +74,7 @@ interface WorkerConfiguration {
    **/
   api?: boolean | number | {
     host?: string,
-    port: string,
+    port: number,
     ipv6Only?: boolean
   },
   /**
