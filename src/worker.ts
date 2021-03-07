@@ -40,7 +40,7 @@ async function init (): Promise<void> {
 /** Called when initialization is complete */
 async function initComplete (): Promise<void> {
   // Send the API port with the ready event
-  await wormhole.event('ready', (<AddressInfo>apiServer.address()).port)
+  await wormhole.event('ready')
 }
 
 /** Called when initialization has failed */
@@ -51,8 +51,8 @@ async function initError (): Promise<void> {
 
 /** Configure the app server */
 async function configure (config: WorkerConfiguration): Promise<void> {
-  if (appServer?.listening) {
-    throw new Error('Server already started')
+  if (appServer) {
+    throw new Error('Worker already configured')
   }
 
   configuration = config
@@ -64,7 +64,7 @@ async function configure (config: WorkerConfiguration): Promise<void> {
 }
 
 /** Start the app server */
-async function start (): Promise<number> {
+async function start (): Promise<AddressInfo> {
   if (appServer?.listening) {
     throw new Error('Server already started')
   }
@@ -75,19 +75,19 @@ async function start (): Promise<number> {
     await listenServer(appServer)
   }
 
-  const appPort = (<AddressInfo>appServer.address()).port
+  const address = <AddressInfo>appServer.address()
 
   // Update the process file with the app port
   await setProcess({
     pid: process.pid,
-    appPort
+    appPort: address.port
   })
 
   if (wormhole.connected) {
-    await wormhole.event('started', appPort)
+    await wormhole.event('started', address)
   }
 
-  return appPort
+  return address
 }
 
 /** Stop the app server */

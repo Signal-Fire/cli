@@ -5,7 +5,14 @@ import { ChildProcess } from 'child_process'
 
 import Wormhole from '@art-of-coding/wormhole'
 
-import { WorkerConfiguration, readJSON, spawnWorker, portAvailable, isNumber } from '../lib/util'
+import {
+  WorkerConfiguration,
+  readJSON,
+  createWorker,
+  portAvailable,
+  isNumber
+} from '../lib/util'
+import { AddressInfo } from 'ws'
 
 export interface StartOptions {
   config?: string,
@@ -74,29 +81,22 @@ export default async function start (opts: StartOptions): Promise<void> {
   let wormhole: Wormhole
 
   try {
-    [ worker, wormhole ] = await spawnWorker()
+    [ worker, wormhole ] = await createWorker(config)
   } catch (e) {
-    console.log('\nUnable to spawn worker')
+    console.log('Unable to create worker')
     return
   }
+
+  let address: AddressInfo
 
   try {
-    await wormhole.command<void>('configure', config)
+    address = await wormhole.command<AddressInfo>('start')
   } catch (e) {
-    console.log('\nUnable to configure worker')
+    console.log('Unable to start worker')
     return
   }
 
-  let appPort: number
-
-  try {
-    appPort = await wormhole.command<number>('start')
-  } catch (e) {
-    console.log('\nUnable to start worker')
-    return
-  }
-
-  console.log(`Worker has been started on port ${appPort}`)
+  console.log(`Worker has been started on port ${address.port}`)
 
   wormhole.disconnect()
   worker.unref()

@@ -5,6 +5,7 @@ import { Server as NetServer } from 'net'
 import { resolve } from 'path'
 import { readFile, writeFile } from 'fs/promises'
 import { ChildProcess, spawn } from 'child_process'
+import { EventEmitter } from 'events'
 
 import Wormhole from '@art-of-coding/wormhole'
 
@@ -65,36 +66,47 @@ export async function closeServer (server: Server): Promise<void> {
   })
 }
 
-/** Spawn a new worker */
-export async function spawnWorker (): Promise<[ ChildProcess, Wormhole ]> {
-  const workerPath = resolve(__dirname, '../worker.js')
-  const worker = spawn('node', [ workerPath ], {
+export async function createWorker (config: WorkerConfiguration): Promise<[ ChildProcess, Wormhole ]> {
+  const path = resolve(__dirname, '../worker.js')
+  const worker = spawn('node', [ path ], {
     stdio: [ 'ignore', 'ignore', 'ignore', 'ipc' ],
     detached: true
   })
+
   const wormhole = new Wormhole(worker)
 
-  return new Promise<[ ChildProcess, Wormhole ]>((resolve, reject) => {
+  // Wait for the worker's ready event
+  await new Promise<void>((resolve, reject) => {
     function removeListeners (): void {
       worker.removeListener('error', onError)
-      worker.removeListener('exit', onError)
+      worker.removeListener('exit', onExit)
       wormhole.events.removeListener('ready', onReady)
     }
 
     function onReady (): void {
       removeListeners()
-      resolve([ worker, wormhole ])
+      resolve()
     }
 
-    function onError (err?: Error) {
+    function onError (err: Error) {
       removeListeners()
-      reject(err ?? new Error('Unknown error'))
+      reject(err)
+    }
+
+    function onExit (exitCode: number) {
+      removeListeners()
+      reject(new Error(`Worker exited with code ${exitCode}`))
     }
 
     worker.on('error', onError)
-    worker.on('exit', onError)
+    worker.on('exit', onExit)
     wormhole.events.on('ready', onReady)
   })
+
+  // Configure the worker
+  await wormhole.command('configure', config)
+
+  return [ worker, wormhole ]
 }
 
 /** Check if the specified port is available */
