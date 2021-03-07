@@ -67,7 +67,8 @@ interface WorkerConfiguration {
   },
   /**
    * Options for the API server.
-   * If false, the API server is disabled.
+   * If false, the API server is disabled
+   * If true, the API server will use a random open port
    * If a number, this will be the port
    * Otherwise the object is passed to Server.listen()
    **/
