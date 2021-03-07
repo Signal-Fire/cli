@@ -2,6 +2,7 @@
 
 import { resolve } from 'path'
 import { ChildProcess } from 'child_process'
+import { AddressInfo } from 'net'
 
 import Wormhole from '@art-of-coding/wormhole'
 
@@ -12,7 +13,6 @@ import {
   portAvailable,
   isNumber
 } from '../lib/util'
-import { AddressInfo } from 'ws'
 
 export interface StartOptions {
   config?: string,
@@ -32,13 +32,15 @@ export default async function start (opts: StartOptions): Promise<void> {
 
   if (opts.config) {
     // Load from configuration
+    const path = resolve(process.cwd(), opts.config)
+
     try {
       config = {
         ...config,
-        ...(await readJSON(resolve(process.cwd(), opts.config)))
+        ...(await readJSON(path))
       }
     } catch (e) {
-      console.log('Error: unable to load configuration file')
+      console.log('Unable to load configuration file')
       console.error(e)
       return
     }
