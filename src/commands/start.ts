@@ -27,17 +27,18 @@ export default async function start (opts: StartOptions): Promise<void> {
   let config: WorkerConfiguration = {
     registry: 'local',
     api: true,
-    app: {}
+    app: <any>{}
   }
 
   if (opts.config) {
     // Load from configuration
     const path = resolve(process.cwd(), opts.config)
+    const content = await readJSON(path)
 
     try {
       config = {
         ...config,
-        ...(await readJSON(path))
+        ...content
       }
     } catch (e) {
       console.log('Unable to load configuration file')

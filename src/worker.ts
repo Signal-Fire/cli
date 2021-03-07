@@ -51,6 +51,8 @@ async function configure (config: WorkerConfiguration): Promise<void> {
 
     if (config.api === true) {
       await listenServer(apiServer)
+    } else if (typeof config.api === 'number') {
+      await listenServer(apiServer, { port: config.api })
     } else {
       await listenServer(apiServer, config.api)
     }
