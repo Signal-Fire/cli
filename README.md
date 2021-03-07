@@ -56,23 +56,44 @@ Options:
 
 ```ts
 interface WorkerConfiguration {
+  /**
+   * Registry to use. Defaults to 'local' 
+   **/
   registry?: string | {
     name: string,
     args?: any[]
   },
-  api?: boolean | {
+  /**
+   * Options for the API server.
+   * If false, the API server is disabled.
+   * If a number, this will be the port
+   * Otherwise the object is passed to Server.listen()
+   **/
+  api?: boolean | number | {
     host?: string,
-    port?: string,
-    path?: string,
+    port: string,
     ipv6Only?: boolean
   },
+  /**
+   * Options fot the app server.
+   * If not set, defaults to a random open port
+   * If set, the object is passed to Server.listen(
+   **/)
   app?: {
     host?: string,
-    port?: number,
-    path?: string,
+    port: number,
     ipv6Only?: boolean,
+    /**
+     * The path to listen for upgrades on.
+     * All other requests receive 404 Not Found,
+     * a regular HTTP call received 426 Upgrade Required
+     **/
     pathname?: string
   },
+  /**
+   * WebRTC client configuration.
+   * These options are passed to all new clients.
+   **/
   rtcConfig?: {
     bundlePolicy?: RTCBundlePolicy,
     iceCandidatePoolSize?: number,
@@ -92,6 +113,7 @@ Example configuration file:
     "port": 3303,
     "pathname": "/socket"
   },
+  "api": true,
   "rtcConfig": {
     "iceServers": [{
       "urls": "ice.example.com"

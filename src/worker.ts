@@ -19,27 +19,15 @@ let appServer: Server
 
 /** Initializes the worker. */
 async function init (): Promise<void> {
-  // Create the API server
-  const apiToken = await nanoid()
-  apiServer = createApi({
-    token: apiToken
-  })
-
-  // Start the API server on any available port
-  await listenServer(apiServer)
-
   // Add the process to the process list
   await setProcess({
     pid: process.pid,
-    createdOn: new Date().toISOString(),
-    apiPort: (<AddressInfo>apiServer.address()).port,
-    apiToken
+    createdOn: new Date().toISOString()
   })
 }
 
 /** Called when initialization is complete */
 async function initComplete (): Promise<void> {
-  // Send the API port with the ready event
   await wormhole.event('ready')
 }
 
@@ -56,11 +44,29 @@ async function configure (config: WorkerConfiguration): Promise<void> {
   }
 
   configuration = config
-  appServer = createApp(config)
 
-  if (wormhole.connected) {
-    await wormhole.event('configured')
+  if (config.api) {
+    const apiToken = await nanoid()
+    apiServer = createApi({ token: apiToken })
+
+    if (config.api === true) {
+      await listenServer(apiServer)
+    } else if (typeof config.api === 'number') {
+      await listenServer(apiServer, { port: config.api })
+    } else {
+      await listenServer(apiServer, config.api)
+    }
+
+    const address = <AddressInfo>apiServer.address()
+
+    await setProcess({
+      pid: process.pid,
+      apiPort: address.port,
+      apiToken
+    })
   }
+
+  appServer = createApp(config)
 }
 
 /** Start the app server */
@@ -69,10 +75,10 @@ async function start (): Promise<AddressInfo> {
     throw new Error('Server already started')
   }
 
-  if (configuration.app && Object.keys(configuration.app).includes('port')) {
-    await listenServer(appServer, configuration.app)
-  } else {
+  if (!Object.keys(configuration.app).length) {
     await listenServer(appServer)
+  } else {
+    await listenServer(appServer, configuration.app)
   }
 
   const address = <AddressInfo>appServer.address()
@@ -103,7 +109,7 @@ async function stop (): Promise<void> {
 
 /** Dispose of everything and clean up */
 async function dispose (): Promise<void> {
-  if (apiServer.listening) {
+  if (apiServer?.listening) {
     await closeServer(apiServer)
   }
 
@@ -112,7 +118,7 @@ async function dispose (): Promise<void> {
   }
 
   if (wormhole.connected) {
-    await wormhole.event('disposed')
+    await wormhole.event('dispose')
     wormhole.disconnect()
   }
 

@@ -5,7 +5,6 @@ import { Server as NetServer } from 'net'
 import { resolve } from 'path'
 import { readFile, writeFile } from 'fs/promises'
 import { ChildProcess, spawn } from 'child_process'
-import { EventEmitter } from 'events'
 
 import Wormhole from '@art-of-coding/wormhole'
 
@@ -14,16 +13,14 @@ export interface WorkerConfiguration {
     name: string,
     args?: any[]
   },
-  api?: boolean | {
+  api?: boolean | number | {
     host?: string,
-    port?: string,
-    path?: string,
+    port: string,
     ipv6Only?: boolean
   },
   app?: {
     host?: string,
-    port?: number,
-    path?: string,
+    port: number,
     ipv6Only?: boolean,
     pathname?: string
   },
