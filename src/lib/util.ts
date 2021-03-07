@@ -18,7 +18,7 @@ export interface WorkerConfiguration {
     port: string,
     ipv6Only?: boolean
   },
-  app?: {
+  app?: number | {
     host?: string,
     port: number,
     ipv6Only?: boolean,

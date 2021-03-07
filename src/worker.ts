@@ -75,10 +75,12 @@ async function start (): Promise<AddressInfo> {
     throw new Error('Server already started')
   }
 
-  if (!Object.keys(configuration.app).length) {
-    await listenServer(appServer)
-  } else {
+  if (typeof configuration.app === 'number') {
+    await listenServer(appServer, { port: configuration.app })
+  } else if (Object.keys(configuration.app).length) {
     await listenServer(appServer, configuration.app)
+  } else {
+    await listenServer(appServer)
   }
 
   const address = <AddressInfo>appServer.address()
