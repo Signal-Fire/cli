@@ -57,7 +57,7 @@ export default async function info (pid: string, { token, json }: InfoOptions): 
   const arr = [
     info.pid,
     info.createdOn,
-    prettyMilliseconds(uptime, { compact: true }),
+    prettyMilliseconds(uptime),
     info.apiPort ?? '-',
     info.appPort ?? '-'
   ]

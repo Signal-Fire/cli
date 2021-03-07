@@ -58,7 +58,7 @@ export default async function list ({ token, json }: ListOptions): Promise<void>
       i,
       info.pid,
       createdOn.toLocaleString(),
-      prettyMilliseconds(uptime, { compact: true }),
+      prettyMilliseconds(uptime),
       info.apiPort ?? '-',
       info.appPort ?? '-'
     ]
