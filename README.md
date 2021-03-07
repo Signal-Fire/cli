@@ -55,22 +55,30 @@ Options:
 ### Configuration file
 
 ```ts
-interface Configuration {
-  registry: 'local' | {
+interface WorkerConfiguration {
+  registry?: string | {
     name: string,
     args?: any[]
   },
-  server: {
-    port?: number
-    host?: string
-    path?: string
-    patname: string
+  api?: boolean | {
+    host?: string,
+    port?: string,
+    path?: string,
     ipv6Only?: boolean
   },
+  app?: {
+    host?: string,
+    port?: number,
+    path?: string,
+    ipv6Only?: boolean,
+    pathname?: string
+  },
   rtcConfig?: {
-    iceCandidatePoolSize?: number
-    iceServers?: RTCIceServer[]
-    iceTransportPolicy?: RTCIceTransportPolicy
+    bundlePolicy?: RTCBundlePolicy,
+    iceCandidatePoolSize?: number,
+    iceServers: RTCIceServer[],
+    iceTransportPolicy: RTCIceTransportPolicy,
+    rtcpMuxPolicy?: RTCRtcpMuxPolicy
   }
 }
 ```
