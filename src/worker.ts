@@ -47,7 +47,7 @@ async function configure (config: WorkerConfiguration): Promise<void> {
 
   if (config.api) {
     const apiToken = await nanoid()
-    apiServer = createApi({ token: apiToken })
+    apiServer = createApi({ token: apiToken, config })
 
     if (config.api === true) {
       await listenServer(apiServer)

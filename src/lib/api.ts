@@ -4,6 +4,12 @@ import { Server } from 'http'
 import Koa, { Middleware } from 'koa'
 import Router from '@koa/router'
 import createHttpError from 'http-errors'
+import { WorkerConfiguration } from './util'
+
+export interface CreateApiOptions {
+  token: string,
+  config: WorkerConfiguration
+}
 
 export function checkToken (token: string): Middleware {
   return async function checkToken (ctx, next) {
@@ -17,17 +23,52 @@ export function checkToken (token: string): Middleware {
   }
 }
 
-export default function createApi ({ token }: { token: string }): Server {
+export default function createApi ({ token, config }: CreateApiOptions): Server {
   const app = new Koa()
   const router = new Router()
 
+  router.get('/configuration',
+    checkToken(token),
+    async function configuration (ctx) {
+      ctx.status = 200
+      ctx.response.type = 'json'
+      ctx.body = config
+    }
+  )
+
   router.get('/resource-usage',
     checkToken(token),
-    async function resourceUsage (ctx, next) {
+    async function resourceUsage (ctx) {
       ctx.status = 200
       ctx.response.type = 'json'
       ctx.body = process.resourceUsage()
-      return next()
+    }
+  )
+
+  router.get('/cpu-usage',
+    checkToken(token),
+    async function cpuUsage (ctx) {
+      ctx.status = 200
+      ctx.response.type = 'json'
+      ctx.body = process.cpuUsage()
+    }
+  )
+
+  router.get('/memory-usage',
+    checkToken(token),
+    async function memoryUsage (ctx) {
+      ctx.status = 200
+      ctx.response.type = 'json'
+      ctx.body = process.memoryUsage()
+    }
+  )
+
+  router.get('/uptime',
+    checkToken(token),
+    async function uptiem (ctx) {
+      ctx.status = 200
+      ctx.response.type = 'json'
+      ctx.body = { uptime: process.uptime() }
     }
   )
 
