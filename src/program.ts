@@ -32,12 +32,14 @@ program
   .command('info <pid>')
   .description('list info for worker')
   .option('-t, --token', 'include api token in output', false)
+  .option('-j, --json', 'output json', false)
   .action(info)
 
 program
   .command('list')
   .description('list all active workers')
   .option('-t, --token', 'include api token in output', false)
+  .option('-j, --json', 'output json', false)
   .action(list)
 
 program.parse(process.argv)

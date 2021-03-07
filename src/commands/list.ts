@@ -5,11 +5,27 @@ import prettyMilliseconds from 'pretty-ms'
 
 import { readProcessFile } from '../lib/process'
 
-export default async function list ({ token }: { token: boolean }): Promise<void> {
-  console.log('Listing all active workers\n')
+export interface ListOptions {
+  token: boolean,
+  json: boolean
+}
 
+export default async function list ({ token, json }: ListOptions): Promise<void> {
   const list = await readProcessFile()
   const pids = Object.keys(list)
+
+  if (json) {
+    if (!token) {
+      pids.forEach(pid => {
+        delete list[pid].apiToken
+      })
+    }
+
+    console.log(JSON.stringify(list))
+    return
+  }
+
+  console.log('Listing all active workers\n')
 
   if (!pids.length) {
     console.log('There are no active workers')

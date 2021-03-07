@@ -6,13 +6,16 @@ import prettyMilliseconds from 'pretty-ms'
 import { readProcessFile } from '../lib/process'
 import { isNumber } from '../lib/util'
 
-export default async function info (pid: string, { token }: { token: boolean }): Promise<void> {
+export interface InfoOptions {
+  token: boolean,
+  json: boolean
+}
+
+export default async function info (pid: string, { token, json }: InfoOptions): Promise<void> {
   if (!isNumber(pid)) {
     console.log('Expected PID to be a number')
     return
   }
-
-  console.log(`Listing info for worker with PID ${pid}\n`)
 
   const list = await readProcessFile()
 
@@ -20,6 +23,19 @@ export default async function info (pid: string, { token }: { token: boolean }):
     console.log(`Worker with PID ${pid} not found`)
     return
   }
+
+  if (json) {
+    const info = list[pid]
+
+    if (!token) {
+      delete info.apiToken
+    }
+
+    console.log(JSON.stringify(info))
+    return
+  }
+
+  console.log(`Listing info for worker with PID ${pid}\n`)
 
   const head = [
     'PID',
