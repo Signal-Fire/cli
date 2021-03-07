@@ -1,8 +1,12 @@
 # Signal-Fire Server CLI
 
-CLI for [Signal-Fire Server](https://github.com/Signal-Fire/server).
+Command-Line Interface (CLI) for [Signal-Fire Server](https://github.com/Signal-Fire/server).
 
-Signal-Fire Server is a __WebRTC__ signaling server built for node.js.
+__Signal-Fire Server__ is a __WebRTC__ signaling server built for node.js.
+
+A WebRTC signaling server communicates between peers to set up
+peer-to-peer audio/video and/or data channels. This allows your
+clients to communicate directly with each other.
 
 ## Features
 
@@ -11,8 +15,6 @@ Signal-Fire Server is a __WebRTC__ signaling server built for node.js.
 * Easy configuration and set-up
 
 ## Install
-
-> This project is currently a __work in progress__!
 
 Install globally:
 
@@ -45,14 +47,14 @@ Usage: signal-fire start [options]
 start a new worker
 
 Options:
-  -p, --port <port>    port to listen on
   -c, --config <file>  path to configuration file
+  -p, --port <port>    port to listen on
   -h, --host <host>    host to listen on
   -P, --path <path>    path to listen on
   --help               display help for command
 ```
 
-### Configuration file
+#### Configuration file
 
 ```ts
 interface WorkerConfiguration {
@@ -123,7 +125,9 @@ Example configuration file:
 }
 ```
 
-## Stop
+### Stop
+
+Use `stop all` to stop all running workers.
 
 ```
 Usage: signal-fire stop [options] <pid>
@@ -134,7 +138,7 @@ Options:
   -h, --help  display help for command
 ```
 
-## List
+### List
 
 ```
 Usage: signal-fire list [options]
