@@ -143,6 +143,7 @@ list all active workers
 
 Options:
   -t, --token  include api token in output (default: false)
+  -j, --json   output json
   -h, --help   display help for command
 ```
 
@@ -155,6 +156,7 @@ list info for worker
 
 Options:
   -t, --token  include api token in output (default: false)
+  -j, --json   output json
   -h, --help   display help for command
 ```
 
