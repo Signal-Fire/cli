@@ -11,6 +11,8 @@ import { WorkerConfiguration } from './util'
 export function loadRegistry (config: WorkerConfiguration['registry']): Registry {
   if (config === 'local') {
     return new LocalRegistry()
+  } else if (typeof config === 'string') {
+    config = { name: config }
   }
 
   let Constructor: any
@@ -55,7 +57,7 @@ function handleRequest (path?: string): (req: IncomingMessage, res: ServerRespon
 export default function createServer (config: WorkerConfiguration): Server {
   const registry = loadRegistry(config.registry)
   const app = createApp(registry, config.rtcConfig)
-  const server = new Server(handleRequest(config.server?.pathname))
+  const server = new Server(handleRequest(config.app?.pathname))
 
   server.on('upgrade', app.onUpgrade())
   return server

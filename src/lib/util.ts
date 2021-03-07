@@ -9,20 +9,29 @@ import { ChildProcess, spawn } from 'child_process'
 import Wormhole from '@art-of-coding/wormhole'
 
 export interface WorkerConfiguration {
-  registry: 'local' | {
+  registry?: string | {
     name: string,
     args?: any[]
   },
-  server?: {
+  api?: boolean | {
+    host?: string,
+    port?: string,
+    path?: string,
+    ipv6Only?: boolean
+  },
+  app?: {
     host?: string,
     port?: number,
+    path?: string,
     ipv6Only?: boolean,
     pathname?: string
   },
   rtcConfig?: {
+    bundlePolicy?: RTCBundlePolicy,
     iceCandidatePoolSize?: number,
     iceServers: RTCIceServer[],
-    iceTransportPolicy: RTCIceTransportPolicy
+    iceTransportPolicy: RTCIceTransportPolicy,
+    rtcpMuxPolicy?: RTCRtcpMuxPolicy
   }
 }
 

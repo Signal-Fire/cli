@@ -69,8 +69,8 @@ async function start (): Promise<number> {
     throw new Error('Server already started')
   }
 
-  if (configuration.server && Object.keys(configuration.server).includes('port')) {
-    await listenServer(appServer, configuration.server)
+  if (configuration.app && Object.keys(configuration.app).includes('port')) {
+    await listenServer(appServer, configuration.app)
   } else {
     await listenServer(appServer)
   }

@@ -19,7 +19,8 @@ export default async function start (opts: StartOptions): Promise<void> {
 
   let config: WorkerConfiguration = {
     registry: 'local',
-    server: {}
+    api: true,
+    app: {}
   }
 
   if (opts.config) {
@@ -36,7 +37,7 @@ export default async function start (opts: StartOptions): Promise<void> {
     }
   } else {
     if (opts.host) {
-      config.server.host = opts.host
+      config.app.host = opts.host
     }
 
     if (opts.port) {
@@ -45,7 +46,7 @@ export default async function start (opts: StartOptions): Promise<void> {
         return
       }
 
-      config.server.port = parseInt(opts.port)
+      config.app.port = parseInt(opts.port)
     }
 
     if (opts.path) {
@@ -54,13 +55,13 @@ export default async function start (opts: StartOptions): Promise<void> {
         return
       }
 
-      config.server.pathname = opts.path
+      config.app.pathname = opts.path
     }
   }
 
   // Check port availability
-  if (config.server.port) {
-    const { port } = config.server
+  if (config.app.port) {
+    const { port } = config.app
     const available = await portAvailable(port)
 
     if (!available) {
