@@ -1,6 +1,7 @@
 'use strict'
 
 import Table from 'cli-table3'
+import prettyMilliseconds from 'pretty-ms'
 
 import { readProcessFile } from '../lib/process'
 
@@ -19,12 +20,13 @@ export default async function list ({ token }: { token: boolean }): Promise<void
     '#',
     'PID',
     'Created',
+    'Uptime',
     'API Port',
     'App Port'
   ]
 
   if (token) {
-    head.splice(3, 0, 'API Token')
+    head.splice(4, 0, 'API Token')
   }
 
   const table = new Table({ head })
@@ -33,16 +35,20 @@ export default async function list ({ token }: { token: boolean }): Promise<void
   for (const pid of pids) {
     i++
     const info = list[pid]
+    const createdOn = new Date(info.createdOn)
+    const uptime = Date.now() - createdOn.getTime()
+
     const arr = [
       i,
       info.pid,
-      info.createdOn,
+      createdOn.toLocaleString(),
+      prettyMilliseconds(uptime, { compact: true }),
       info.apiPort ?? '-',
       info.appPort ?? '-'
     ]
 
     if (token) {
-      arr.splice(3, 0, info.apiToken)
+      arr.splice(4, 0, info.apiToken)
     }
 
     table.push(arr)

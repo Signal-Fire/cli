@@ -31,7 +31,7 @@ async function init (): Promise<void> {
   // Add the process to the process list
   await setProcess({
     pid: process.pid,
-    createdOn: new Date().toLocaleString(),
+    createdOn: new Date().toISOString(),
     apiPort: (<AddressInfo>apiServer.address()).port,
     apiToken
   })
