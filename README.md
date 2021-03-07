@@ -77,9 +77,10 @@ interface WorkerConfiguration {
   /**
    * Options fot the app server.
    * If not set, defaults to a random open port
-   * If set, the object is passed to Server.listen(
-   **/)
-  app?: {
+   * If a number, this will be the port
+   * If set, the object is passed to Server.listen()
+   **/
+  app?: number | {
     host?: string,
     port: number,
     ipv6Only?: boolean,
