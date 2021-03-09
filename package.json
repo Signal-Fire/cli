@@ -36,7 +36,7 @@
     "@art-of-coding/wormhole": "^2.0.1",
     "@koa/router": "^10.0.0",
     "@lucets/registry": "^0.2.0",
-    "@signal-fire/server": "^0.2.1",
+    "@signal-fire/server": "^0.3.0",
     "cli-table3": "^0.6.0",
     "commander": "^7.1.0",
     "http-errors": "^1.8.0",
