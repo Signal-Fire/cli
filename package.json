@@ -1,6 +1,6 @@
 {
   "name": "@signal-fire/cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "CLI for Signal-Fire Server",
   "main": "./dist/index.js",
   "bin": {
