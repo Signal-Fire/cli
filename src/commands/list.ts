@@ -64,7 +64,7 @@ export default async function list ({ token, json }: ListOptions): Promise<void>
     ]
 
     if (token) {
-      arr.splice(4, 0, info.apiToken)
+      arr.splice(4, 0, info.apiToken ?? '-')
     }
 
     table.push(arr)

@@ -63,7 +63,7 @@ export default async function info (pid: string, { token, json }: InfoOptions): 
   ]
 
   if (token) {
-    arr.splice(3, 0, info.apiToken)
+    arr.splice(3, 0, info.apiToken ?? '-')
   }
 
   table.push(arr)
