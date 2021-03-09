@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@art-of-coding/port-available": "0.0.1",
-    "@art-of-coding/wormhole": "^2.0.1",
+    "@art-of-coding/wormhole": "^2.1.0",
     "@koa/router": "^10.0.0",
     "@lucets/registry": "^0.2.0",
     "@signal-fire/server": "^0.3.0",
