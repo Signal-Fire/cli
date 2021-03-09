@@ -5,12 +5,12 @@ import { ChildProcess } from 'child_process'
 import { AddressInfo } from 'net'
 
 import Wormhole from '@art-of-coding/wormhole'
+import portAvailable from '@art-of-coding/port-available'
 
 import {
   WorkerConfiguration,
   readJSON,
   createWorker,
-  portAvailable,
   isNumber
 } from '../lib/util'
 

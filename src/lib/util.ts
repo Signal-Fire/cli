@@ -101,39 +101,9 @@ export async function createWorker (config: WorkerConfiguration): Promise<[ Chil
   })
 
   // Configure the worker
-  await wormhole.command('configure', config)
+  await wormhole.command<void>('configure', config)
 
   return [ worker, wormhole ]
-}
-
-/** Check if the specified port is available */
-export async function portAvailable (port: number): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
-    function removeListeners () {
-      server.removeListener('error', onError)
-      server.removeListener('listening', onListening)
-    }
-
-    function onError (err: any) {
-      removeListeners()
-      if (err.code === 'EADDRINUSE') {
-        resolve(false)
-      } else {
-        reject(err)
-      }
-    }
-
-    function onListening () {
-      removeListeners()
-      server.close()
-      resolve(true)
-    }
-
-    const server = new NetServer()
-    server.on('error', onError)
-    server.on('listening', onListening)
-    server.listen(port)
-  })
 }
 
 /** Check if a string is a number */

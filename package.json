@@ -33,6 +33,7 @@
     "@types/ws": "^7.4.0"
   },
   "dependencies": {
+    "@art-of-coding/port-available": "0.0.1",
     "@art-of-coding/wormhole": "^2.0.1",
     "@koa/router": "^10.0.0",
     "@lucets/registry": "^0.2.0",
