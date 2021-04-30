@@ -37,12 +37,12 @@
     "@art-of-coding/wormhole": "^2.1.0",
     "@koa/router": "^10.0.0",
     "@lucets/registry": "^0.2.0",
-    "@signal-fire/server": "^0.3.0",
+    "@signal-fire/server": "^0.4.0",
     "cli-table3": "^0.6.0",
-    "commander": "^7.1.0",
+    "commander": "^7.2.0",
     "http-errors": "^1.8.0",
     "koa": "^2.13.1",
-    "nanoid": "^3.1.20",
+    "nanoid": "^3.1.22",
     "pretty-ms": "^7.0.1"
   }
 }
